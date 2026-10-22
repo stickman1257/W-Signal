@@ -19,7 +19,7 @@ def clean(value):
     return value
 
 
-def run(source, output):
+def run(source, output, prediction_file=None):
     output.mkdir(parents=True, exist_ok=True)
     raw = source / 'data/origin'
     a = pd.read_csv(raw / 'water_signals_by_legal_dong.csv')
@@ -52,11 +52,22 @@ def run(source, output):
         [d.coverage.ge(1 - 1e-9), d.coverage.gt(0)], ['full', 'partial'], default='unavailable')
     d['linkage_status'] = np.where(d.split, 'equal_allocation', 'unsplit_aggregate_link')
     d.to_csv(output / 'spatial_quality.csv', index=False, encoding='utf-8-sig')
-    supplied = pd.read_csv(source / 'data/derived/admin_signals.csv', dtype={'admin8': str})
-    check = d.merge(supplied[['admin8', 'W']], on='admin8', suffixes=('', '_supplied'))
-    discrepancy = float((check.W.round(1) - check.W_supplied).abs().max())
-    if discrepancy > 0.100001:
-        raise ValueError(f'기존 지수와 재산출 결과를 확인하세요: {discrepancy}')
+    discrepancy = None
+    supplied_file = source / 'data/derived/admin_signals.csv'
+    if supplied_file.exists():
+        supplied = pd.read_csv(supplied_file, dtype={'admin8': str})
+        check = d.merge(supplied[['admin8', 'W']], on='admin8', suffixes=('', '_supplied'))
+        discrepancy = float((check.W.round(1) - check.W_supplied).abs().max())
+        if discrepancy > 0.100001:
+            raise ValueError(f'지수 대조 결과를 확인하세요: {discrepancy}')
+    pilot = d[d.scored & d.area.eq('urban') & ~d['split'] & d.coverage.ge(1-1e-9)].copy()
+    pilot.to_csv(output / 'pilot_eligibility.csv', index=False, encoding='utf-8-sig')
+    pilot_summary = {'scored_urban': int((d.scored & d.area.eq('urban')).sum()),
+                     'unsplit_urban': int((d.scored & d.area.eq('urban') & ~d['split']).sum()),
+                     'unsplit_full_coverage_urban': len(pilot),
+                     'conditions': '도시 점수 제공·공간 배분 없음·공개 분모 전체 포함',
+                     'interpretation': '집계 품질에 따른 시범 업무 검토 범위. 실제 위기가구 여부와 별도.'}
+    (output / 'pilot_summary.json').write_text(json.dumps(pilot_summary, ensure_ascii=False, indent=2))
 
     u = d[d.scored & d.area.eq('urban')].copy()
     scores = {'product': u.W}
@@ -109,7 +120,7 @@ def run(source, output):
                               'p_descriptive': result.pvalue}
     legal.to_csv(output / 'legal_dong_correlation_data.csv', index=False, encoding='utf-8-sig')
 
-    predictions = pd.read_csv(source / 'results/feature_ablation_predictions.csv')
+    predictions = pd.read_csv(prediction_file or source / 'results/feature_ablation_predictions.csv')
     w = predictions[predictions.feature_set.eq('수도·규모·지역')]
     all_inputs = predictions[predictions.feature_set.eq('수도+소득·지역')]
     paired = w.merge(all_inputs, on=['fold', 'gu', 'legal'], suffixes=('_water', '_all'), validate='one_to_one')
@@ -123,7 +134,7 @@ def run(source, output):
     by_group.to_csv(output / 'income_effect_by_district.csv', encoding='utf-8-sig')
     manifest = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(raw.glob('*.csv'))}
     summary = {
-        'scope': '기존 승인 반출 집계와 제공 연결표만 재분석. 가구 발견 성능 또는 예방 효과 평가가 아님.',
+        'scope': '승인 반출 집계와 제공 연결표의 지역 분석. 가구 발견·예방 효과는 후속 현장 평가 대상.',
         'source_sha256': manifest,
         'spatial': {
             'admin_dong_total': len(d), 'scored': int(d.scored.sum()),
@@ -163,5 +174,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--predictions', type=Path)
     args = parser.parse_args()
-    run(args.source.resolve(), args.output.resolve())
+    run(args.source.resolve(), args.output.resolve(), args.predictions.resolve() if args.predictions else None)

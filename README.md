@@ -41,7 +41,7 @@ pip install .
 
 ```bash
 python src/reproduce.py --source . --output outputs/reproduction
-python src/audit_priority.py --source . --output outputs/priority_audit
+python src/audit_priority.py --source . --predictions outputs/reproduction/feature_ablation_predictions.csv --output outputs/priority_audit
 python src/review_policy.py --input outputs/priority_audit/spatial_quality.csv --output outputs/review_policy
 ```
 
@@ -67,3 +67,5 @@ python src/build_demo.py --root .
 지역 회귀는 법정동 116개를 구·군으로 분리해 평가했습니다. MAE는 수도·규모·지역 입력 5.96%p, 소득 포함 입력 6.09%p입니다. 소득은 지역의 경제적 돌봄 여건을 설명하는 자료로 병행합니다.
 
 사용량 예측은 동일 홀짝 검침군의 다음 고지 대표값을 대상으로 합니다. 2023년 7월~2024년 6월 과거 구간의 MAPE는 2.06%입니다. 지역 검토 정책 비교는 정해진 지역 수를 고르는 방식의 차이를 설명하며, 실제 가구 발견 성능이나 예방 효과는 현장 확인 결과로 평가합니다.
+
+승인 집계3종과 공공 연결표를 배치하면 기존 파생값·예측값 파일 없이 결과를 생성합니다. `outputs/priority_audit/pilot_summary.json`은 공간 배분과 공개 분모 조건에 따른 시범 업무 검토 범위입니다. 제공기관·자료명은 대회 신청 선택목록 표기를 따라 `data_lineage.csv`에 기록했습니다.
