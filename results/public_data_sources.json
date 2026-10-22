@@ -1,0 +1,46 @@
+{
+  "sources": [
+    {
+      "name": "대구광역시 종합사회복지관 현황",
+      "url": "https://www.daegu.go.kr/welf/index.do?menu_id=00000702",
+      "retrieved": "2026-10-21",
+      "n_rows": 28,
+      "role": "구군별 돌봄기관 안내. 운영시점 자료로 지수 학습에 혼합하지 않음.",
+      "original_sha256": "dacfcf5c1c620bf0483695ef937f6dd4b9d24ba063d50e4d38473b6e5d2782d0"
+    },
+    {
+      "name": "대구광역시 동구 행정동별 노인인구 및 무연고 사망자수",
+      "url": "https://www.data.go.kr/data/15134142/fileData.do",
+      "download": "https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000003651909&fileDetailSn=1&insertDataPrcus=N",
+      "retrieved": "2026-10-21",
+      "n_rows": 88,
+      "years": [
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "role": "2023년 노인인구는 동구 지역 맥락, 2025년 장소기준 사망수는 탐색적 대조.",
+      "license": "공공데이터포털 이용허락범위 제한 없음",
+      "original_sha256": "30308a9525328108d4b62230cfc48352a12ed6f084b2e85d61e416350d648fd2"
+    }
+  ],
+  "donggu_matches": 22,
+  "exploratory_comparison": {
+    "sig_rate": {
+      "n": 22,
+      "rho": 0.18657318958104968,
+      "p_two_sided": 0.40576976477034493
+    },
+    "low_rate": {
+      "n": 22,
+      "rho": 0.19264101206398862,
+      "p_two_sided": 0.3903900225448788
+    },
+    "W": {
+      "n": 22,
+      "rho": 0.18497616990500834,
+      "p_two_sided": 0.4098723679970384
+    }
+  }
+}

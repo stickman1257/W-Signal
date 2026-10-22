@@ -1,0 +1,8 @@
+﻿file,rows,role,source,sha256,access
+data/origin/water_usage_by_district.csv,438,홀짝 검침군의 다음 고지 대표 사용량 예측,센터 계량기·요금 고지 정보에서 산출한 승인 반출 집계;계보는 data_lineage.csv,6b131a5a03ea114a349cbec921a5ec99e85878540d2c5783a58eddeb11602382,보안상 필요 시 승인 범위 내 제공
+data/origin/water_signals_by_legal_dong.csv,167,생활 신호율 분포와 지역 회귀(법정동),센터 계량기·요금 고지 정보에서 산출한 승인 반출 집계;계보는 data_lineage.csv,7572de4a3209aa44a263bd8372eccdbcc428a9db86ecf832ddc7bbd8dad21ed0,보안상 필요 시 승인 범위 내 제공
+data/origin/income_by_admin_dong.csv,4568,경제적 돌봄 여건 및 지역 모형 입력,KCB 행정동 소득 통계의 승인 반출 low_rate;원 소득구간 명세 확인 필요,4cef5a898f828e0acd49737b242d7b0de3432274623362a3bd6382a54ce8df59,보안상 필요 시 승인 범위 내 제공
+data/public/daegu_adm2024.geojson,150,행정동 경계 지도,제공된2024년 행정동 경계;150개 지리 객체,108bd36d716a27d57cbd20848634ec327cdbf35953f1ded68161e6f01687ae38,공공자료
+data/public/daegu_kikmix_2024.csv,505,"법정동과 행정동 연결, 균등배분 가정",제공된2024년 법정동·행정동 연결표;배분 규칙은 src/audit_priority.py,6f7b1c1796bbe085b2e9c89e55792f9c6b0e03db1046d9815ef0a291ab80b151,공공자료
+results/donggu_elderly_unclaimed_deaths.csv,88,동구 22개 동의 배경·탐색적 대조,https://www.data.go.kr/data/15134142/fileData.do,e2077ab7195afbc2b2a6e19f472645a58a400938aa6186a4c8cb9b0b8b89b5db,공공자료
+results/welfare_centers.csv,28,28개 공식 기관 안내,https://www.daegu.go.kr/welf/index.do?menu_id=00000702,0d2f897d81628980b73928609216f6b2b25ba0c07a219bb954ae20fc588d2e86,공공자료
