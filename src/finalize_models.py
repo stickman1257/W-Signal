@@ -44,7 +44,7 @@ for month in pd.date_range('2024-07-01','2024-12-01',freq='MS'):
 pd.DataFrame(future).to_csv(OUT/'usage_recursive_forecast.csv',index=False,encoding='utf-8-sig')
 dump({'model':'직전 추세와 3회 중앙값 추세의 동일가중 결합','selection_year':'2022','weights':[.5,.5],
  'formula':'lag6 * (lag1/lag7 + median(lag1/lag7, lag2/lag8, lag3/lag9)) / 2',
- 'same_parity_bills':True,'calibration':'2023-01~06','evaluation':'2023-07~2024-06','evaluation_status':'이전 실험에서 확인한 과거 구간의 재평가',
+ 'same_parity_bills':True,'calibration':'2023-01~06','evaluation':'2023-07~2024-06','evaluation_status':'개발 과정에서 확인한 과거 구간의 평가',
  'intervals':u['frozen_choice_intervals']},OUT/'usage_selected_model.json')
 print({'usage_MAPE':u['retrospective_2023H2_2024H1'][pick]['MAPE'],'paired_CI':u['paired_new_minus_old_MAPE_CI95'],'quarters':quarter,
  'signal_candidate_CI':s['exploratory_svr_minus_previous_CI95']})
